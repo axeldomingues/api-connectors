@@ -64,7 +64,7 @@ class BitMEXWebsocket:
         '''Get the raw instrument data for this symbol.'''
         # Turn the 'tickSize' into 'tickLog' for use in rounding
         instrument = self.data['instrument'][0]
-        instrument['tickLog'] = int(math.fabs(math.log10(instrument['tickSize'])))
+        instrument['tickLog'] = math.ceil(math.fabs(math.log10(instrument['tickSize'])))
         return instrument
 
     def get_ticker(self):
@@ -79,7 +79,7 @@ class BitMEXWebsocket:
         }
 
         # The instrument has a tickSize. Use it to round values.
-        instrument = self.data['instrument'][0]
+        instrument = self.get_instrument()
         return {k: round(float(v or 0), instrument['tickLog']) for k, v in ticker.items()}
 
     def funds(self):
